@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 
 from selenium_ui.base_page import BasePage
 from selenium_ui.conftest import print_timing
-from selenium_ui.confluence.pages.pages import Login, AllUpdates
+from selenium_ui.confluence.pages.pages import Login, AllUpdates, Editor
 from util.conf import CONFLUENCE_SETTINGS
 
 
@@ -37,8 +37,18 @@ def app_specific_action(webdriver, datasets):
 
         @print_timing("selenium_app_custom_action:view_page")
         def sub_measure():
+            # view page
             page.go_to_url(f"{CONFLUENCE_SETTINGS.server_url}/pages/viewpage.action?pageId={app_specific_page_id}")
             page.wait_until_visible((By.ID, "title-text"))  # Wait for title field visible
-            page.wait_until_visible((By.ID, "ID_OF_YOUR_APP_SPECIFIC_UI_ELEMENT"))  # Wait for you app-specific UI element by ID selector
+
+            # edit page
+            editor = Editor(webdriver, page_id=app_specific_page_id) # Edit page
+            editor.go_to()
+            editor.wait_for_page_loaded() # Wait for editor visible
+
+            # edit page source
+            editor.wait_until_clickable((By.ID, "rte-source-editor")).click()  # Wait for source editor button visible and click
+            editor.wait_until_clickable((By.CLASS_NAME, "button-panel-submit-button")).click() # Wait for source editor apply button visible and click
+            editor.click_submit()
         sub_measure()
     measure()

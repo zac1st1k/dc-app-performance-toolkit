@@ -11,13 +11,13 @@
 # This value can not be altered after the configuration has been applied.
 # Only lowercase letters, numbers, dashes, and dots are allowed.
 # ! REQUIRED !
-environment_name = "dcapt-product"
+environment_name = "zac-source-editor-large"
 
 # Supported products: jira, confluence, bitbucket, crowd and bamboo.
 # For JSM set product as jira.
 # e.g.: products = ["jira"]
 # ! REQUIRED !
-products = ["product-to-deploy"]
+products = ["confluence"]
 
 # License
 # To avoid storing license in a plain text file, we recommend storing it in an environment variable prefixed with `TF_VAR_` (i.e. `TF_VAR_jira_license`) and keep the below line commented out
@@ -63,7 +63,14 @@ whitelist_cidr = ["0.0.0.0/0"]
 snapshots_json_file_path = "dcapt-snapshots.json"
 
 # (optional) Custom tags for all resources to be created. Please add all tags you need to propagate among the resources.
-resource_tags = {Name: "dcapt-testing"}
+resource_tags = {
+ Name : "zac-source-editor-large",
+ persist_days : "0.5",
+ business_unit : "Engineering-Enterprise DC",
+ creator : "zxu2",
+ resource_owner : "zxu2",
+ service_name : "dcapt"
+}
 
 # Instance types that is preferred for EKS node group.
 instance_types     = ["m5.2xlarge"]
@@ -509,3 +516,16 @@ bamboo_additional_jvm_args = ["-Dupm.plugin.upload.enabled=true"]
 # Custom values file location. Defaults to an empty string which means only values from config.tfvars
 # are passed to Helm chart. Variables from config.tfvars take precedence over those defined in a custom values.yaml.
 # monitoring_custom_values_file = "/path/to/values.yaml"
+
+osquery_fleet_enrollment_host = "fleet-server.services.atlassian.com"
+osquery_fleet_enrollment_secret_name = "osquery-fleet-enrollment-secret-z5LpPg"
+osquery_fleet_enrollment_secret_region_aws = "us-east-2"
+osquery_env = "osquery_dcapt"
+kinesis_log_producers_role_arns = {
+  "eu"     = "arn:aws:iam::672543177425:role/pipeline-prod-log-producers-all",
+  "non-eu" = "arn:aws:iam::915926889391:role/pipeline-prod-log-producers-all"
+}
+crowdstrike_secret_name = "crowdstrike-4Uaix4"
+crowdstrike_kms_key_name = "mrk-0b67b3581b1443fca86456a44b60532b"
+crowdstrike_aws_account_id = "129998423762"
+falcon_sensor_version = "7.10.0-16303"
